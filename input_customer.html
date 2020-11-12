@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./static/common/css/base.css">
+    <link rel="stylesheet" href="./static/common/plugin/layui/css/layui.css">
+    <title>导入客户</title>
+    <style>
+        .container {
+            padding: 20px;
+        }
+        .drag-box {
+            display: flex;
+            width: 400px;
+            height: 200px;
+            justify-content: center;
+            align-items: center;
+            color: gray;
+            border: 1px dotted gray;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 20px auto;
+        }
+        .btn-box {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>
+            <a href="javascript: history.go(-1);" class="layui-btn layui-btn-xs layui-btn-primary">
+                <i class="layui-icon layui-icon-return"></i> 
+                返回
+            </a>
+            &ensp;
+            <i class="layui-icon layui-icon-note"></i>
+            导入客户
+        </h2>
+        <hr>
+        <label class="layui-btn layui-btn-primary" for="file_input">
+            <i class="layui-icon layui-icon-upload-drag"></i>
+            &nbsp; 
+            选择xlsx文件
+        </label>
+        <input type="file" id="file_input" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" class="layui-hide">
+        <div class="customer-table-box">
+            <table class=""></table>
+        </div>
+
+        <div class="btn-box">
+            <button class="layui-btn layui-btn">确认无误</button>
+            <button class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/html" id="customer_table">
+    <table class="layui-table">
+        <thead>
+            <tr>
+                <td>姓名</td>
+                <td>电话</td>
+                <td>地址</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+            {{each customer_list}}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</script>
+<script src="./static/common/plugin/art-template/art-template.js"></script>
+<script src="./static/common/plugin/sheet/xlsx.mini.min.js"></script>
+<script>
+    var file_input = document.querySelector("#file_input");
+    // 用于保存表格中的数据
+    var data = null;
+    // 选中文件
+    file_input.onchange = function(){
+        if(!this.files[0]){
+            return;
+        }
+
+        // 读取表格
+        readExcel(this.files[0], data=>{
+            console.log(data);
+        });
+    }
+
+    var fields = ["name", "company", "tel", "addr", "tag", "stage", "contract", "price", "amount", "appointStart", "appointEnd", "period", "payee", "payeeUsername", "bank", "remark"];
+
+    // 读取xlsx文件内容
+    function readExcel(file, callback) {
+        let reader = new FileReader();
+        reader.onload = function(e) {
+            let binStr = e.target.result;
+            let workbook = XLSX.read(binStr, {type: "binary"});
+            let data = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]],{
+                // 自定义header头
+                header: fields,
+                // 去掉头部的表格头内容，从下标1开始读取
+                range: 1
+            });
+            //返回数据放在callback中
+            callback(data);
+        };
+        reader.readAsBinaryString(file);
+    }
+
+    // 模板渲染
+    function renderHTML(){
+        var template = template("customer_table", {
+            
+        });
+    }
+    
+</script>
