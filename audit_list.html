@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./static/common/css/base.css">
+    <link rel="stylesheet" href="./static/common/plugin/layui/css/layui.css">
+    <title>审批列表</title>
+    <style>
+        .container {
+            padding: 20px;
+        }
+
+        .unconfirm {
+            color: gray;
+        }
+
+        .confirm-pass {
+            color: green;
+        }
+
+        .confirm-refuse {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>
+            <i class="layui-icon layui-icon-note"></i>
+            全部审批列表
+        </h2>
+        <hr>
+
+        <table class="layui-table audit-list">
+            <thead>
+                <tr>
+                    <td>提交时间</td>
+                    <td>提交人</td>
+                    <td>标题</td>
+                    <td>金额</td>
+                    <td>状态</td>
+                    <td>
+                        操作
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        2020-11-10 10:20:14
+                    </td>
+                    <td>陈一丹</td>
+                    <td>
+                        2020-11-9日出差
+                    </td>
+                    <td class="money">￥180.5</td>
+                    <td>
+                        <span class="unconfirm">第一级未确认</span>
+                        <span class="confirm-pass">第一级通过</span>
+                        <span class="confirm-refuse">第一级拒绝</span>
+
+                        <span class="unconfirm">第二级未确认</span>
+                        <span class="confirm-pass">第二级通过</span>
+                        <span class="confirm-refuse">第二级拒绝</span>
+                    </td>
+                    <td>
+                        <a class="layui-btn layui-btn-xs layui-btn-normal" href="./audit_detail.html?id=10">详情</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
