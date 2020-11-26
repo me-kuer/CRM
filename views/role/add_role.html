@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/common/css/base.css">
+    <link rel="stylesheet" href="/static/common/plugin/layui/css/layui.css">
+    <title>添加角色</title>
+    <style>
+        .container {
+            padding: 20px;
+        }
+
+        .layui-form-label {
+            width: 100px;
+        }
+
+        .role-form {
+            margin-top: 20px;
+        }
+
+        .layui-input,
+        .layui-textarea {
+            width: 450px;
+        }
+
+        .power-box > li {
+            display: flex;
+            border: 1px solid lightgray;
+            width: 900px;
+        }
+
+        .module-opt {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 150px;
+            background-color: #fafafa;
+
+        }
+
+        .power-list {
+            padding-left: 20px;
+        }
+        .power-list > div {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        .layui-form-item .layui-form-checkbox[lay-skin=primary] {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>
+            <i class="layui-icon layui-icon-note"></i>
+            添加角色
+        </h2>
+        <hr>
+        <form class="layui-form role-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">名称:</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" placeholder="请输入角色名称" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注:</label>
+                <div class="layui-input-block">
+                    <textarea name="desc" placeholder="请输入角色备注" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">分配权限:</label>
+                <div class="layui-input-block">
+                    <ul class="power-box">
+                        <li>
+                            <div class="module-opt">
+
+                                <input type="checkbox" lay-skin="primary" class="module-name" lay-filter="customer" id="" value="1">
+                                客户管理
+                            </div>
+                            <div class="power-list">
+                                <div>
+                                    <input type="checkbox" lay-skin="primary" class="power-opt" name="power" lay-filter="power" value="/customer/add">
+                                    添加客户
+                                </div>
+                                <div>
+                                    <input type="checkbox" lay-skin="primary" class="power-opt" name="power" lay-filter="power" value="/customer/excel_input">
+                                    excel导入客户页
+                                </div>
+                                <div>
+                                    <input type="checkbox" lay-skin="primary" class="power-opt" name="power" lay-filter="power" value="/customer/my">
+                                    我的客户列表
+                                </div>
+                                <div>
+                                    <input type="checkbox" lay-skin="primary" class="power-opt" name="power" lay-filter="power" value="/customer/joinme">
+                                    加入我的客户
+                                </div>
+                                <div>
+                                    <input type="checkbox" lay-skin="primary" class="power-opt" lay-filter="power" name="power" value="/customer/public">
+                                    公共客户列表
+                                </div>
+                                <div>
+                                    <input type="checkbox" name="power" class="power-opt" lay-skin="primary" lay-filter="power" value="/customer/mod_my_customer">
+                                    修改我的客户
+                                </div>
+                                <div>
+                                    <input type="checkbox" name="power" class="power-opt" lay-skin="primary" lay-filter="power" value="/customer/my_customer_detail">
+                                    我的客户详情页
+                                </div>
+                                <div>
+                                    <input type="checkbox" name="power" class="power-opt" lay-skin="primary" lay-filter="power" value="/customer/customerlist">
+                                    全部客户列表（管理员用）
+                                </div>
+                                <div>
+                                    <input type="checkbox" name="power" class="power-opt" lay-skin="primary" lay-filter="power" value="/customer/mod">
+                                    修改客户（管理员用）
+                                </div>
+                                <div>
+                                    <input type="checkbox" name="power" class="power-opt" lay-skin="primary" lay-filter="power" value="/customer/detail">
+                                    客户详情（管理员用）
+                                </div>
+                                <div>
+                                    <input type="checkbox" name="power" class="power-opt" lay-skin="primary" lay-filter="power" value="/customer/del">
+                                    删除客户（管理员用）
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="module-opt">
+                                <input type="checkbox" lay-skin="primary" lay-filter="audit" class="module-name" id="audit" value="2">
+                                结款审批
+                            </div>
+                            <div class="power-list">
+                                <div>
+                                    <input type="checkbox" name="power" class="power-opt" lay-skin="primary" lay-filter="power" value="/audit/add">
+                                    提交审批
+                                </div>
+                                <div>
+                                    <input type="checkbox" name="power" class="power-opt" lay-skin="primary" lay-filter="power" value="/audit/firstconfirmlist">
+                                    第一级审批列表
+                                </div>
+                                <div>
+                                    <input type="checkbox" name="power" class="power-opt" lay-skin="primary" lay-filter="power" value="/audit/secondconfirmlist">
+                                    第二级审批列表
+                                </div>
+                                <div>
+                                    <input type="checkbox" name="power" class="power-opt" lay-skin="primary" lay-filter="power" value="/audit/detail">
+                                    审批详情
+                                </div>
+                                <div>
+                                    <input type="checkbox" name="power" class="power-opt" lay-skin="primary" lay-filter="power" value="/audit/firstconfirm">
+                                    第一级确认
+                                </div>
+                                <div>
+                                    <input type="checkbox" name="power" class="power-opt" lay-skin="primary" lay-filter="power" value="/audit/secondconfirm">
+                                    第二级确认
+                                </div>
+                                <div>
+                                    <input type="checkbox" name="power" class="power-opt" lay-skin="primary" lay-filter="power" value="/audit/auditlist">
+                                    全部审批列表（管理员用）
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">&ensp;</label>
+                <div class="layui-input-block">
+                    <button type="button" class="layui-btn submit-btn">添加</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+<script src="/static/common/js/base.js"></script>
+<script src="/static/common/plugin/layui/layui.js"></script>
+<script>
+    layui.use("form", function(){
+        var form = layui.form;
+        // 选择模块名后全部选中该模块
+        var module_name = document.querySelectorAll(".module-name");
+        module_name.forEach((v,k)=>{
+            var layfilter = v.getAttribute("lay-filter");
+
+            form.on(`checkbox(${layfilter})`, function(data){
+
+                if(data.elem.checked){
+                    var checked_status = true;
+                }else{
+                    var checked_status = false;
+                }
+
+                var power_checkbox_list = v.parentNode.parentNode.querySelectorAll(".power-opt");
+
+                power_checkbox_list.forEach((val,key)=>{
+                    val.checked = checked_status;
+                });
+                // 重新渲染表单
+                form.render();
+            });
+        });
+
+        // 判断单个的功能点击
+        form.on("checkbox(power)",function(e){
+            if(e.elem.checked){
+                e.elem.parentNode.parentNode.parentNode.querySelector(".module-name").checked=true;
+            }else{
+                // 判断该checkbox所在的大模块下的所有checkbox是否还有选中的
+                var checkbox_list = e.elem.parentNode.parentNode.parentNode.querySelectorAll(".power-opt");
+
+                // 初始状态为false
+                var checkbox_status = false;
+
+                for(var i=0;i<checkbox_list.length;i++){
+                    // 只要还有一个选中的则状态就为true,并退出循环
+                    if(checkbox_list[i].checked){
+                        checkbox_status = true;
+                        break;
+                    }
+                }
+                e.elem.parentNode.parentNode.parentNode.querySelector(".module-name").checked=checkbox_status;
+
+            }
+            // 重新渲染
+            form.render();
+        })
+    });
+
+    var name_input = document.querySelector("[name=name]");
+    var desc_input = document.querySelector("[name=desc]");
+    var submit_btn = document.querySelector(".submit-btn");
+    submit_btn.onclick = function(){
+        if(isNull(name_input.value)){
+            alert("角色名称不能为空！");
+            return;
+        }
+        ajax({
+            url: "/role/add",
+            type: "post",
+            data: {
+                name: name_input.value,
+                desc: desc_input.value,
+                module_id: getModuleList().join(","),
+                power_list: getPowerList().join(",")
+            }
+        }).then(res=>{
+            if(res.code == 200){
+                alert(res.msg);
+                location.href = "/role/rolelist";
+            }else{
+                alert(res.msg);
+            }
+        });
+    }
+
+    // 获取所有权限复选框的值
+    function getPowerList(){
+        var power_checkbox = document.querySelectorAll(".power-opt");
+        var power_list = [];
+        power_checkbox.forEach((v,k)=>{
+            if(v.checked){
+                power_list.push(v.value);
+            }
+        });
+        return power_list;
+    }
+
+    // 获取所有模块的值
+    function getModuleList(){
+        var module_name_checkbox = document.querySelectorAll(".module-name");
+        var module_id = [];
+        module_name_checkbox.forEach((v,k)=>{
+            if(v.checked){
+                module_id.push(v.value);
+            }
+        });
+        return module_id;
+    }
+</script>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/common/css/base.css">
+    <link rel="stylesheet" href="/static/common/plugin/layui/css/layui.css">
+    <title>员工列表</title>
+    <style>
+        .container {
+            padding: 20px;
+        }
+
+        .staff-table {
+            width: 1100px;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>
+        <i class="layui-icon layui-icon-note"></i>
+        员工列表
+    </h2>
+    <hr>
+    <table class="layui-table staff-table">
+        <thead>
+        <tr>
+            <td>编号</td>
+            <td>姓名</td>
+            <td>手机号</td>
+            <td>用户名</td>
+            <td>角色</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody>
+        {{range $k,$v := .userList}}
+            <tr>
+                <td>{{$v.Id}}</td>
+                <td>{{$v.Name}}</td>
+                <td>{{$v.Tel}}</td>
+                <td>{{$v.Username}}</td>
+                <td>{{$v.RoleName}}</td>
+                <td>
+                    <a class="layui-btn layui-btn-sm layui-btn-normal" href="/user/detail?user_id={{$v.Id}}">
+                        <i class="layui-icon layui-icon-edit"></i>
+                    </a>
+                    <!----超级管理员不显示删除按钮---->
+                    {{if ne $v.Id 1}}
+                    <button onclick="delUser({{$v.Id}})" class="del_btn layui-btn layui-btn-sm layui-btn-danger">
+                        <i class="layui-icon layui-icon-delete"></i>
+                    </button>
+                    {{end}}
+                </td>
+            </tr>
+        {{end}}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
+<script src="/static/common/js/base.js"></script>
+<script>
+    function delUser(id){
+        if(confirm("确定要删除该用户吗？"))
+        ajax({
+            url: "/user/del?id="+id,
+            type: "get",
+        }).then(res=>{
+            if(res.code == 200){
+                alert(res.msg);
+                location.reload();
+            }else{
+                alert(res.msg);
+            }
+        });
+    }
+</script>

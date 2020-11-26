@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/common/css/base.css">
+    <link rel="stylesheet" href="/static/common/plugin/layui/css/layui.css">
+    <title>我的客户</title>
+    <style>
+        .container {
+            padding: 20px;
+        }
+        .filter-option-box > li{
+            display: flex;
+            height: 40px;
+        }
+        .search-input {
+            height: 31px;
+            width: 300px;
+            margin-left: 20px;
+        }
+        .opt-title {
+            width: 150px;
+            background-color: lightblue;
+            display: flex;
+            align-items: center;
+            padding-left: 15px;
+        }
+        .opt {
+            margin-left: 40px;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .opt input[type=radio] {
+            display: none;
+        }
+        .opt label {
+            cursor: pointer;
+            padding: 5px 15px;
+            border-radius: 3px;
+        }
+        .opt input[type=radio]:checked+label {
+            background-color: #1E9FFF;
+            color: white;
+        }
+        
+        #pagination {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>
+        <i class="layui-icon layui-icon-note"></i>
+        我的客户
+    </h2>
+    <hr>
+    <ul class="filter-option-box">
+        <li>
+            <div class="opt-title">关键词查询</div>
+            <input type="text" class="layui-input search-input" placeholder="请输入查询关键字">
+            <button type="button" class="layui-btn layui-btn-sm search-btn">
+                <i class="layui-icon layui-icon-search"></i>
+            </button>
+        </li>
+        <li>
+            <div class="opt-title">客户阶段</div>
+            <div class="opt">
+                <input type="radio" name="stage" id="default_stage" value="" checked>
+                <label for="default_stage">不限</label>
+            </div>
+            <div class="opt">
+                <input type="radio" name="stage" id="inbound_stage" value="1">
+                <label for="inbound_stage">新入库</label>
+            </div>
+            <div class="opt">
+                <input type="radio" name="stage" id="communicate_stage" value="2">
+                <label for="communicate_stage">沟通中</label>
+            </div>
+            <div class="opt">
+                <input type="radio" name="stage" id="appoint_stage" value="3">
+                <label for="appoint_stage">已签约</label>
+            </div>
+            <div class="opt">
+                <input type="radio" name="stage" id="discontinuous_stage" value="4">
+                <label for="discontinuous_stage">到期不续</label>
+            </div>
+        </li>
+        <li>
+            <div class="opt-title">标签</div>
+            <div class="opt">
+                <input type="radio" name="tag" id="default_tag" value="" checked>
+                <label for="default_tag">不限</label>
+            </div>
+            <div class="opt">
+                <input type="radio" name="tag" id="talent_tag" value="1">
+                <label for="talent_tag">人才库</label>
+            </div>
+            <div class="opt">
+                <input type="radio" name="tag" id="enterprise_tag" value="2">
+                <label for="enterprise_tag">企业库</label>
+
+            </div>
+        </li>
+        <li>
+            <div class="opt-title">
+                更新截止时间
+            </div>
+            <div class="opt">
+                <input type="radio" name="update" id="default_update" value="" checked>
+                <label for="default_update">不限</label>
+            </div>
+            <div class="opt">
+                <input type="radio" name="update" id="today_update" value="1">
+                <label for="today_update">今天</label>
+            </div>
+            <div class="opt">
+                <input type="radio" name="update" id="one_update" value="2" >
+                <label for="one_update">近1天</label>
+            </div>
+            <div class="opt">
+                <input type="radio" name="update" id="seven_update" value="3">
+                <label for="seven_update">近7天</label>
+            </div>
+        </li>
+        <li>
+            <div class="opt-title">
+                签约到期时间
+            </div>
+            <div class="opt">
+                <input type="radio" name="appoint" id="default_appoint" value="" checked>
+                <label for="default_appoint">不限</label>
+            </div>
+            <div class="opt">
+                <input type="radio" name="appoint" id="today_appoint" value="1">
+                <label for="today_appoint">今天</label>
+            </div>
+            <div class="opt">
+                <input type="radio" name="appoint" id="one_appoint" value="2" >
+                <label for="one_appoint">近1天</label>
+            </div>
+            <div class="opt">
+                <input type="radio" name="appoint" id="seven_appoint" value="3">
+                <label for="seven_appoint">近7天</label>
+            </div>
+        </li>
+    </ul>
+    <table class="layui-table layui-form">
+        <thead>
+            <tr>
+                <td>编号</td>
+                <td>姓名</td>
+                <td>电话</td>
+                <td>公司(或证书)</td>
+                <td>地址</td>
+                <td>阶段</td>
+                <td>标签</td>
+                <td>签约到期时间</td>
+                <td>最近更新时间</td>
+                <td>创建时间</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+        <tbody>
+            {{range $k,$v := .customerList}}
+            <tr>
+                <td>
+                    {{$v.Id}}
+                </td>
+                <td>{{$v.Name}}</td>
+                <td>{{$v.Tel}}</td>
+                <td>{{$v.Company}}</td>
+                <td>{{$v.Addr}}</td>
+                <td>
+                    {{if eq $v.Stage 0}}
+                        已失效
+                    {{end}}
+                    {{if eq $v.Stage 1}}
+                        新入库
+                    {{end}}
+                    {{if eq $v.Stage 2}}
+                        沟通中
+                    {{end}}
+                    {{if eq $v.Stage 3}}
+                        已签约
+                    {{end}}
+                    {{if eq $v.Stage 4}}
+                        到期不续
+                    {{end}}
+                </td>
+                <td>
+                    {{if eq $v.Tag 1}}
+                        人才库
+                    {{end}}
+                    {{if eq $v.Tag 2}}
+                        企业库
+                    {{end}}
+                </td>
+                <td>
+                    {{if ne $v.AppointEnd "0"}}
+                        {{$v.AppointEnd|str2date}}
+                    {{end}}
+                </td>
+                <td>
+                    {{if ne $v.UpdateTime "0"}}
+                        {{$v.UpdateTime|str2date}}
+                    {{end}}
+                </td>
+                <td>{{$v.CreateTime|str2date}}</td>
+                <td>
+                    <a href="/customer/my_customer_detail?id={{$v.Id}}" class="layui-btn layui-btn-normal layui-btn-sm">
+                        <i class="layui-icon layui-icon-edit"></i>
+                    </a>
+                </td>
+            </tr>
+        {{end}}
+        </tbody>
+    </table>
+    <input type="hidden" id="total" value="{{.total}}">
+    <div id="pagination"></div>
+</div>
+</body>
+</html>
+<script src="/static/common/js/base.js"></script>
+<script src="/static/common/plugin/layui/layui.js"></script>
+<script>
+    // 获取参数
+    var keywords = getUrlParam("keywords") || "";
+    var stage = getUrlParam("stage") || "";
+    var tag = getUrlParam("tag") || "";
+    var update = getUrlParam("update") || "";
+    var updatetime = getUrlParam("updatetime") || 0;
+    var appoint = getUrlParam("appoint") || "";
+    var appointtime = getUrlParam("appointtime") || 0;
+    var page = getUrlParam("page") || 1;
+    var pagesize = 10;
+    // 搜索框确认按钮
+    var search_btn = document.querySelector(".search-btn");
+    var search_input = document.querySelector(".search-input");
+    search_btn.onclick = function(){
+        keywords = search_input.value;
+        redirect();
+    }
+
+
+    // 选项变化事件监听
+    var stage_radio = document.querySelectorAll("[name=stage]");
+    stage_radio.forEach((v,k)=>{
+        v.onchange = function(){
+            stage = this.value;
+            redirect();
+        }
+    });
+
+    var tag_radio = document.querySelectorAll("[name=tag]");
+    tag_radio.forEach((v,k)=>{
+        v.onchange = function(){
+            tag = this.value;
+            redirect();
+        }
+    });
+
+    var update_radio = document.querySelectorAll("[name=update]");
+    update_radio.forEach((v,k)=>{
+        v.onchange = function(){
+            update = this.value;
+            switch (update) {
+                case 1:
+                    updatetime = new Date(new Date().toLocaleDateString()).getTime()/1000;
+                    break;
+                case 2:
+                    updatetime = Date.parse(new Date()) - 60*60*24;
+                    break;
+                case 3:
+                    updatetime = Date.parse(new Date()) - 7*60*60*24;
+                    break;
+                default:
+                    updatetime = 0;
+            }
+            redirect();
+        }
+    });
+
+    var appoint_radio = document.querySelectorAll("[name=appoint]");
+    appoint_radio.forEach((v,k)=>{
+        v.onchange = function(){
+            appoint = this.value;
+            switch (update) {
+                case 1:
+                    appointtime = new Date(new Date().toLocaleDateString()).getTime()/1000;
+                    break;
+                case 2:
+                    appointtime = Date.parse(new Date()) - 60*60*24;
+                    break;
+                case 3:
+                    appointtime = Date.parse(new Date()) - 7*60*60*24;
+                    break;
+                default:
+                    appointtime = 0;
+            }
+            redirect();
+        }
+    });
+
+
+    // 进行默认选中
+    for(var i=0;i<stage_radio.length;i++){
+        if(stage_radio[i].value == stage){
+            stage_radio[i].checked = true;
+            break
+        }
+    }
+    for(var i=0;i<tag_radio.length;i++){
+        if(tag_radio[i].value == tag){
+            tag_radio[i].checked = true;
+            break
+        }
+    }
+    for(var i=0;i<update_radio.length;i++){
+        if(update_radio[i].value == update){
+            update_radio[i].checked = true;
+            break
+        }
+    }
+    for(var i=0;i<appoint_radio.length;i++){
+        if(appoint_radio[i].value == appoint){
+            appoint_radio[i].checked = true;
+            break
+        }
+    }
+
+    // 跳转
+    function redirect(){
+        page = 1;
+        location.href = `/customer/my?stage=${stage}&tag=${tag}&update=${update}&updatetime=${updatetime}&appoint=${appoint}&appointtime=${appointtime}&keywords=${keywords}`;
+    }
+
+    // 分页
+    var total_input = document.querySelector("#total");
+    layui.use("laypage", function(){
+        var laypage = layui.laypage;
+
+        //执行一个laypage实例
+        laypage.render({
+            elem: "pagination", //注意，这里的 test1 是 ID，不用加 # 号
+            count:total_input.value, //数据总数，从服务端得到
+            limit: 10,
+            curr: page,
+            jump: function(obj, first){
+                if(first){
+                    return;
+                }
+                location.href = `/customer/my?stage=${stage}&tag=${tag}&update=${update}&updatetime=${updatetime}&appoint=${appoint}&appointtime=${appointtime}&keywords=${keywords}&page=${obj.curr}&pagesize=${obj.limit}`;
+            }
+        });
+    });
+
+</script>

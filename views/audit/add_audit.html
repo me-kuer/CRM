@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/common/css/base.css">
+    <link rel="stylesheet" href="/static/common/plugin/layui/css/layui.css">
+    <title>发起审批</title>
+    <style>
+        .container {
+            padding: 20px;
+        }
+
+        .audit-form {
+            width: 500px;
+        }
+
+        .btn-box {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>
+        <i class="layui-icon layui-icon-note"></i>
+        提交审批
+    </h2>
+    <hr>
+    <!-- 表单 -->
+    <form class="layui-form audit-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">标题:</label>
+            <div class="layui-input-block">
+                <input type="text" name="title" placeholder="请输入标题" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">金额:</label>
+            <div class="layui-input-block">
+                <input type="number" name="money" min="0" placeholder="请输入金额" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">描述:</label>
+            <div class="layui-input-block">
+                <textarea name="desc" placeholder="请输入描述" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item btn-box">
+            <button type="button" class="layui-btn submit-btn">提交</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>
+<script src="/static/common/js/base.js"></script>
+<script>
+    var submit_btn = document.querySelector(".submit-btn");
+
+    var title_input = document.querySelector("[name=title]");
+    var money_input = document.querySelector("[name=money]");
+    var desc_input = document.querySelector("[name=desc]");
+
+    // 提交
+    submit_btn.onclick = function () {
+        if(isNull(title_input.value)){
+            alert("标题不能为空");
+            return;
+        }
+        if(isNull(money_input.value)){
+            alert("金额不能为空");
+            return;
+        }
+        console.log(money_input.value);
+        ajax({
+            url: "/audit/add",
+            type: "post",
+            data: {
+                title: title_input.value,
+                money: money_input.value,
+                desc: desc_input.value
+            }
+        }).then(res=>{
+            if(res.code == 200){
+                alert(res.msg);
+                location.reload();
+            }else{
+                alert(res.msg);
+            }
+        });
+
+    }
+</script>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/common/css/base.css">
+    <link rel="stylesheet" href="/static/common/plugin/layui/css/layui.css">
+    <title>添加员工</title>
+    <style>
+        .container {
+            padding: 20px;
+            min-height: 1000px;
+        }
+        .user-form {
+            width: 550px;
+            margin: 10px auto;
+        }
+        .layui-form-item {
+            margin-top: 25px;
+        }
+        .layui-form-label {
+            width: 100px;
+        }
+        .layui-input-inline {
+            padding-left: 10px;
+        }
+        .submit-btn-box {
+            text-align: center;
+            padding-top: 50px;
+        }
+        .submit-btn {
+            width: 300px;
+            border-radius: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>
+            <i class="layui-icon layui-icon-note"></i>
+            添加员工
+        </h2>
+        <hr>
+        <form class="layui-form user-form" name="user_form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">姓名:</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" placeholder="请输入员工姓名" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">联系方式:</label>
+                <div class="layui-input-block">
+                    <input type="number" name="tel" placeholder="请输入联系方式" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">登录账号:</label>
+                <div class="layui-input-block">
+                    <input type="text" name="username" placeholder="请输入登录账号" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">登录密码:</label>
+                <div class="layui-input-block">
+                    <input type="password" name="password" placeholder="请输入登录密码" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">确认密码:</label>
+                <div class="layui-input-block">
+                    <input type="password" name="re_password" placeholder="请再次输入密码" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">角色:</label>
+                <div class="layui-input-inline">
+                    <select name="role">
+                        <option value="">请选择</option>
+                        {{range $k,$v := .roleList}}
+                            <option value="{{$v.Id}}">{{$v.Name}}</option>
+                        {{end}}
+                    </select>
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <a class="layui-btn layui-btn-xs layui-btn-normal" href="/role/add">+ 添加角色</a>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">允许登录</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" checked="checked" value="1" name="open" lay-skin="switch"  lay-text="开|关">
+                </div>
+            </div>
+            <div class="submit-btn-box">
+                <button type="button" class="layui-btn submit-btn"> 添加 </button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+<script src="/static/common/js/base.js"></script>
+<script src="/static/common/plugin/layui/layui.js"></script>
+<script>
+    layui.use(["form", "layer"],function(){});
+
+    var submit_btn = document.querySelector(".submit-btn");
+    submit_btn.onclick = function(){
+        var formData = new FormData(document.user_form);
+
+        if(isNull(formData.get("name"))){
+            layer.msg("姓名不能为空！", {icon: 5, time: 1500});
+            console.log("OK");
+            return;
+        }
+        if(isNull(formData.get("username"))){
+            layer.msg("用户名不能为空！", {icon: 5, time: 1500});
+            return;
+        }
+        if(isNull(formData.get("password"))){
+            layer.msg("密码不能为空！", {icon: 5, time: 1500});
+            return;
+        }
+        if(isNull(formData.get("re_password"))){
+            layer.msg("确认密码不能为空！", {icon: 5, time: 1500});
+            return;
+        }
+        if(isNull(formData.get("role"))){
+            layer.msg("请选择角色！", {icon: 5, time: 1500});
+            return;
+        }
+
+        // 校验密码与确认密码两次输入是否一致
+        if(formData.get("password") != formData.get("re_password")){
+            layer.msg("两次输入密码不一致！", {icon: 5, time: 1500});
+            return;
+        }
+
+        // 如果 status 为空，则将其值设置为2(禁止登陆)
+        if(isNull(formData.get("status"))){
+            formData.set("status", 2);
+        }
+
+        // 删除确认密码项
+        formData.delete("re_password");
+
+        ajax({
+            url: "/user/add",
+            type: "post",
+            is_formdata: true,
+            data: formData
+        }).then(res=>{
+            if (res.code == 200) {
+                alert(res.msg);
+                location.href = "/user/userlist"
+            }else{
+                alert(res.msg);
+            }
+        });
+
+    }
+</script>

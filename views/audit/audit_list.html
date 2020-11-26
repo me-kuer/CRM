@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/common/css/base.css">
+    <link rel="stylesheet" href="/static/common/plugin/layui/css/layui.css">
+    <title>审批列表</title>
+    <style>
+        .container {
+            padding: 20px;
+        }
+
+        .unconfirm {
+            color: gray;
+        }
+
+        .confirm-pass {
+            color: green;
+        }
+
+        .confirm-refuse {
+            color: red;
+        }
+        #pagination {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>
+            <i class="layui-icon layui-icon-note"></i>
+            全部审批列表
+        </h2>
+        <hr>
+
+        <table class="layui-table audit-list">
+            <thead>
+                <tr>
+                    <td>提交时间</td>
+                    <td>提交人</td>
+                    <td>标题</td>
+                    <td>金额</td>
+                    <td>第一级确认</td>
+                    <td>第二级确认</td>
+                    <td>
+                        操作
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                {{range $k,$v := .auditList}}
+                    <tr>
+                        <td>
+                            {{$v.CreateTime|str2date}}
+                        </td>
+                        <td>{{$v.UserName}}</td>
+                        <td>
+                            {{$v.Title}}
+                        </td>
+                        <td class="money">￥{{$v.Money}}</td>
+                        <td>
+                            {{if eq $v.FirstConfirm 0}}
+                                <span class="unconfirm">未确认</span>
+                            {{end}}
+                            {{if eq $v.FirstConfirm 1}}
+                                <span class="confirm-pass">通过</span>
+                            {{end}}
+                            {{if eq $v.FirstConfirm 2}}
+                                <span class="confirm-refuse">拒绝</span>
+                            {{end}}
+                        </td>
+                        <td>
+                            {{if eq $v.SecondConfirm 0}}
+                                <span class="unconfirm">未确认</span>
+                            {{end}}
+                            {{if eq $v.SecondConfirm 1}}
+                                <span class="confirm-pass">通过</span>
+                            {{end}}
+                            {{if eq $v.SecondConfirm 2}}
+                                <span class="confirm-refuse">拒绝</span>
+                            {{end}}
+                        </td>
+                        <td>
+                            <a class="layui-btn layui-btn-xs layui-btn-normal" href="/audit/detail?id={{$v.Id}}">详情</a>
+                        </td>
+                    </tr>
+                {{end}}
+            </tbody>
+        </table>
+        <!-- 分页数据--->
+        <input type="hidden" id="page" value="{{.page}}">
+        <input type="hidden" id="total" value="{{.total}}">
+        <div id="pagination"></div>
+    </div>
+</body>
+</html>
+<script src="/static/common/plugin/layui/layui.js"></script>
+<script>
+    var page_input = document.querySelector("#page");
+    var total_input = document.querySelector("#total");
+
+    layui.use("laypage", function(){
+        var laypage = layui.laypage;
+
+        //执行一个laypage实例
+        laypage.render({
+            elem: "pagination", //注意，这里的 test1 是 ID，不用加 # 号
+            count: total_input.value, //数据总数，从服务端得到
+            limit: 8,
+            curr: page_input.value,
+            jump: function(obj, first){
+                if(first){
+                    return;
+                }
+                location.href = "/demo/list?page="+obj.curr+"&pagesize="+obj.limit;
+            }
+        });
+    });
+</script>
