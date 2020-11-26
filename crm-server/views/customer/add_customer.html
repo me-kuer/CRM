@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/common/css/base.css">
+    <link rel="stylesheet" href="/static/common/plugin/layui/css/layui.css">
+    <title>新增客户</title>
+    <style>
+        .container {
+            padding: 20px;
+        }
+        .input-excel-btn {
+            float: right;
+        }
+        .layui-form {
+            width: 500px;
+            margin: 20px 50px;
+        }
+        .layui-form-item {
+            padding: 5px;
+        }
+        .layui-form-label {
+            width: 100px;
+            padding: 9px 5px;
+        }
+        .layui-inline {
+            padding-left: 10px;
+        }
+        .datetime-box {
+            width: 160px !important;
+        }
+        .select-box {
+            width: 250px;
+        }
+        .submit-btn-box {
+            text-align: center;
+            padding-top: 30px;
+        }
+        .submit-btn {
+            width:200px;
+            border-radius: 100px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>
+            <i class="layui-icon layui-icon-note"></i>
+            新增客户
+            <a href="/customer/excel_input" class="layui-btn layui-btn-normal layui-btn-sm input-excel-btn">excel导入</a>
+        </h2>
+        <hr>
+        <form action="" class="layui-form" name="customer_form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">姓名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" placeholder="请输入姓名" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">电话</label>
+                <div class="layui-input-block">
+                    <input type="text" name="tel" placeholder="请输入电话" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">公司(或证书)</label>
+                <div class="layui-input-block">
+                    <input type="text" name="company" placeholder="请输入公司或证书" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">地址</label>
+                <div class="layui-input-block">
+                    <input type="text" name="addr" placeholder="请输入地址" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">标签</label>
+                <div class="layui-input-block select-box">
+                    <select name="tag">
+                        <option value="">请选择</option>
+                        <option value="1">人才库</option>
+                        <option value="2">企业库</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">阶段</label>
+                <div class="layui-input-block select-box">
+                    <select name="stage">
+                        <option value="1">新入库</option>
+                        <option value="2">沟通中</option>
+                        <option value="3">已签约</option>
+                        <option value="4">到期不续</option>
+                        <option value="0">已失效</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">合同</label>
+                <div class="layui-input-block select-box">
+                    <select name="contract" id="">
+                        <option value="1">纸质合同</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">价格</label>
+                <div class="layui-input-block">
+                    <input type="number" name="price" min="0" placeholder="请输入价格" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">付款金额</label>
+                <div class="layui-input-block">
+                    <input type="number" name="amount" min="0" placeholder="请输入付款金额" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">签约期限</label>
+                <div class="layui-inline">
+                    <div class="layui-input-inline datetime-box">
+                        <input type="datetime" name="appoint_start" id="appoint_start" placeholder="开始日期" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid">-</div>
+                    <div class="layui-input-inline datetime-box">
+                        <input type="datetime" name="appoint_end" id="appoint_end" placeholder="结束日期" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">签约年限</label>
+                <div class="layui-input-block">
+                    <input type="text" name="period" placeholder="请输入签约年限" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">收款人</label>
+                <div class="layui-input-block">
+                    <input type="text" name="payee" placeholder="请输入收款人" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">开户行</label>
+                <div class="layui-input-block">
+                    <input type="text" name="bank" placeholder="请输入开户行" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">收款账号</label>
+                <div class="layui-input-block">
+                    <input type="number" name="payee_username" placeholder="请输入收款账号" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <textarea name="remark" placeholder="请输入备注" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item submit-btn-box">
+                <button type="button" class="layui-btn layui-btn submit-btn">添加</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+<script src="/static/common/js/base.js"></script>
+<script src="/static/common/plugin/layui/layui.js"></script>
+<script>
+    layui.use(["form", "laydate"], function(){
+        let laydate = layui.laydate;
+        laydate.render({
+            elem: "#appoint_start"
+        });
+        laydate.render({
+            elem: "#appoint_end"
+        });
+    });
+
+
+    var submit_btn = document.querySelector(".submit-btn");
+    submit_btn.onclick = function(){
+        var formData = new FormData(document.customer_form)
+        // 判断 姓名、标签是否为空
+        if(isNull(formData.get("name"))){
+            alert("姓名不能为空");
+            return;
+        }
+
+        if(isNull(formData.get("tag"))){
+            alert("标签不能为空");
+            return;
+        }
+
+        var data = [{
+            name:   formData.get("name"),
+            tel:    formData.get("tel"),
+            company: formData.get("company"),
+            addr:   formData.get("addr"),
+            tag:    formData.get("tag"),
+            stage:  formData.get("stage"),
+            contract: formData.get("contract"),
+            price:  formData.get("price"),
+            amount: formData.get("amount"),
+            appoint_start: (new Date(formData.get("appoint_start")).getTime()/1000).toString(),
+            appoint_end: (new Date(formData.get("appoint_end")).getTime()/1000).toString(),
+            period: formData.get("period"),
+            payee:  formData.get("payee"),
+            payee_username: formData.get("payee_username"),
+            bank:   formData.get("bank"),
+            remark: formData.get("remark")
+        }];
+        console.log(data);
+        var data_str = JSON.stringify(data);
+        ajax({
+            url: "/customer/add",
+            type: "post",
+            data:{
+                customer_list: data_str
+            }
+        }).then(res=>{
+            if(res.code == 200){
+                alert(res.msg);
+                location.reload();
+            }else{
+                alert(res.msg);
+            }
+        });
+    }
+</script>

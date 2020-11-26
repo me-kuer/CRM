@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/common/css/base.css">
+    <link rel="stylesheet" href="/static/common/plugin/layui/css/layui.css">
+    <title>CRM管理中心</title>
+    <style>
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="layui-side layui-bg-black">
+            <div class="layui-side-scroll">
+                <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+                <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+                    <!----只有超级管理员显示该模块---->
+                    {{if eq .userId 1}}
+                    <li class="layui-nav-item">
+                        <a class="" href="javascript:void(0);">权限管理</a>
+                        <dl class="layui-nav-child">
+                            <dd><a href="/user/userlist" target="body">员工列表</a></dd>
+                            <dd><a href="/user/add" target="body">添加员工</a></dd>
+                            <dd><a href="/role/rolelist" target="body">角色列表</a></dd>
+                            <dd><a href="/role/add" target="body">添加角色</a></dd>
+                        </dl>
+                    </li>
+                    {{end}}
+
+                    {{if (checkModule 1 .moduleList .userId)}}
+                    <li class="layui-nav-item">
+                        <a href="javascript:void(0);">客户管理</a>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                {{if (checkPower "/customer/add" .powerList .userId)}}
+                                <a href="/customer/add" target="body">新增客户</a>
+                                {{end}}
+                            </dd>
+                            <dd>
+                                {{if (checkPower "/customer/my" .powerList .userId)}}
+                                <a href="/customer/my" target="body">我的客户</a>
+                                {{end}}
+                            </dd>
+                            <dd>
+                                {{if (checkPower "/customer/public" .powerList .userId)}}
+                                <a href="/customer/public" target="body">公共客户</a>
+                                {{end}}
+                            </dd>
+                            <dd>
+                                {{if (checkPower "/customer/customerlist" .powerList .userId)}}
+                                <a href="/customer/customerlist" target="body">全部客户</a>
+                                {{end}}
+                            </dd>
+                        </dl>
+                    </li>
+                    {{end}}
+                    {{if (checkModule 2 .moduleList .userId)}}
+                    <li class="layui-nav-item">
+                        <a href="javascript:void(0);">结款审批</a>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                {{if (checkPower "/audit/add" .powerList .userId)}}
+                                <a href="/audit/add" target="body">发起审批</a>
+                                {{end}}
+                            </dd>
+                            <dd>
+                                {{if (checkPower "/audit/firstconfirmlist" .powerList .userId)}}
+                                <a href="/audit/firstconfirmlist" target="body">一级确认</a>
+                                {{end}}
+                            </dd>
+                            <dd>
+                                {{if (checkPower "/audit/secondconfirmlist" .powerList .userId)}}
+                                <a href="/audit/secondconfirmlist" target="body">二级确认</a>
+                                {{end}}
+                            </dd>
+                            <dd>
+                                {{if (checkPower "/audit/auditlist.html" .powerList .userId)}}
+                                <a href="/audit/auditlist.html" target="body">审批列表</a>
+                                {{end}}
+                            </dd>
+                        </dl>
+                    </li>
+                    {{end}}
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script src="/static/common/plugin/layui/layui.js"></script>
+<script>
+    layui.use('element', function(){
+        var element = layui.element;
+    
+    });
+</script>

@@ -1,0 +1,8 @@
+2020/11/25 00:00:23.951 [E] [role.go:83]  sql: database is closed
+2020/11/25 00:01:28.221 [E] [user.go:172]  sql: database is closed
+2020/11/25 00:01:28.563 [E] [user.go:80]  sql: database is closed
+2020/11/25 00:01:28.936 [E] [user.go:172]  sql: database is closed
+2020/11/25 00:01:29.158 [E] [role.go:20]  sql: database is closed
+2020/11/26 09:44:27.835 [E] [init.go:119]  dial tcp 127.0.0.1:3306: connectex: No connection could be made because the target machine actively refused it.
+2020/11/26 09:45:24.336 [E] [init.go:119]  dial tcp 127.0.0.1:3306: connectex: No connection could be made because the target machine actively refused it.
+2020/11/26 09:46:05.217 [E] [index.go:71]  Table not found

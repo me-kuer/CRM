@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/common/css/base.css">
+    <link rel="stylesheet" href="/static/common/plugin/layui/css/layui.css">
+    <title>公共客户</title>
+    <style>
+        .container {
+            padding: 20px;
+        }
+        #pagination {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>
+            <i class="layui-icon layui-icon-note"></i>
+            公共客户
+        </h2>
+        <hr>
+        <button type="button" class="layui-btn layui-btn-normal join-me">
+            <i class="layui-icon layui-icon-star-fill"></i>
+            加入到我的客户
+        </button>
+        <form class="layui-form" name="customer_form">
+            <table class="layui-table">
+                <thead>
+                    <tr>
+                        <td></td>
+                        <td>编号</td>
+                        <td>姓名</td>
+                        <td>电话</td>
+                        <td>公司(或证书)</td>
+                        <td>地址</td>
+                        <td>阶段</td>
+                        <td>标签</td>
+                        <td>创建时间</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{range $k,$v := .customerList}}
+                    <tr>
+                        <td>
+                            <input type="checkbox" lay-skin="primary" name="customer_id" value="{{$v.Id}}">
+                        </td>
+                        <td>{{$v.Id}}</td>
+                        <td>{{$v.Name}}</td>
+                        <td>{{$v.Tel}}</td>
+                        <td>{{$v.Company}}</td>
+                        <td>{{$v.Addr}}</td>
+                        <td>
+                            {{if eq $v.Stage 0}}
+                                已失效
+                            {{end}}
+                            {{if eq $v.Stage 1}}
+                                新入库
+                            {{end}}
+                            {{if eq $v.Stage 2}}
+                                沟通中
+                            {{end}}
+                            {{if eq $v.Stage 3}}
+                                已签约
+                            {{end}}
+                            {{if eq $v.Stage 4}}
+                                到期不续
+                            {{end}}
+                        </td>
+                        <td>
+                            {{if eq $v.Tag 1}}
+                                人才库
+                            {{end}}
+                            {{if eq $v.Tag 2}}
+                                企业库
+                            {{end}}
+                        </td>
+                        <td>
+                            {{$v.CreateTime|str2date}}
+                        </td>
+                    </tr>
+                    {{end}}
+                </tbody>
+            </table>
+        </form>
+        <input type="hidden" id="total" value="{{.total}}">
+        <div id="pagination"></div>
+    </div>
+</body>
+</html>
+<script src="/static/common/js/base.js"></script>
+<script src="/static/common/plugin/layui/layui.js"></script>
+<script>
+    var page = getUrlParam("page") || 1;
+    var pagesize = 10;
+    var total_input = document.querySelector("#total");
+
+    // 初始化layui-form
+    layui.use("form", function(){});
+
+    // 分页
+    layui.use("laypage", function(){
+        var laypage = layui.laypage;
+
+        //执行一个laypage实例
+        laypage.render({
+            elem: "pagination", //注意，这里的 test1 是 ID，不用加 # 号
+            count: total_input.value, //数据总数，从服务端得到
+            limit: pagesize,
+            curr: page,
+            jump: function(obj, first){
+                if(first){
+                    return;
+                }
+                location.href = "/customer/public?page="+obj.curr+"&pagesize="+obj.limit;
+            }
+        });
+    });
+
+    // 加入我的客户列表
+    var joinme_btn = document.querySelector(".join-me");
+    joinme_btn.onclick = function(){
+
+        // 获取选中的id列表
+        var customerIdList = getCheckboxValue();
+
+        // 判断id列表长度
+        if(customerIdList.length == 0){
+            alert("请先选择客户");
+            return;
+        }
+
+        var customerIdStr = customerIdList.join(",");
+
+        ajax({
+            url: "/customer/joinme",
+            type: "post",
+            data: {
+                customer_list: customerIdStr
+            }
+        }).then(res=>{
+            if(res.code == 200){
+                alert(res.msg);
+                location.reload();
+            }else{
+                alert(res.msg);
+            }
+        });
+    }
+
+    // 获取复选框的值
+    function getCheckboxValue(){
+        var checkbox_list = document.querySelectorAll("[name=customer_id]");
+        var values = [];
+
+        checkbox_list.forEach((v,k)=>{
+            if(v.checked){
+                values.push(v.value);
+            }
+        });
+
+        return values;
+    }
+</script>
