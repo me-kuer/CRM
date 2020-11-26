@@ -10,6 +10,9 @@
         .container {
             padding: 20px;
         }
+        .layui-table {
+            font-size: 13px;
+        }
         .select-btn {
             display: flex;
             width: 400px;
@@ -25,6 +28,7 @@
         .btn-box {
             text-align: center;
         }
+
     </style>
 </head>
 <body>
@@ -46,9 +50,8 @@
         </label>
         <input type="file" id="file_input" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" class="layui-hide">
         <div class="customer-table-box">
-            <table class=""></table>
-        </div>
 
+        </div>
         <div class="btn-box">
             <button class="layui-btn layui-btn">确认无误</button>
             <button class="layui-btn layui-btn-primary">重置</button>
@@ -56,9 +59,59 @@
     </div>
 </body>
 </html>
+<script type="text/html" id="customer_table">
+    <table class="layui-table">
+        <thead>
+        <tr>
+            <td>姓名</td>
+            <td>公司(或证书)</td>
+            <td>地址</td>
+            <td>联系方式</td>
+            <td>标签</td>
+            <td>价格</td>
+            <td>总计金额</td>
+            <td>阶段</td>
+            <td>合同类型</td>
+            <td>签约开始时间</td>
+            <td>签约结束时间</td>
+            <td>签约期限</td>
+            <td>收款人</td>
+            <td>收款账户</td>
+            <td>开户行</td>
+            <td>备注信息</td>
+        </tr>
+        </thead>
+        <tbody>
+        {% each data %}
+            <tr>
+                <td>{% $value.name %}</td>
+                <td>{% $value.company %}</td>
+                <td>{% $value.addr %}</td>
+                <td>{% $value.tel %}</td>
+                <td>{% $value.tag %}</td>
+                <td>{% $value.price %}</td>
+                <td>{% $value.amount %}</td>
+                <td>{% $value.stage %}</td>
+                <td>{% $value.contract %}</td>
+                <td>{% $value.appoint_start %}</td>
+                <td>{% $value.appoint_end %}</td>
+                <td>{% $value.period %}</td>
+                <td>{% $value.payee %}</td>
+                <td>{% $value.payee_username %}</td>
+                <td>{% $value.bank %}</td>
+                <td>{% $value.remark %}</td>
+            </tr>
+        {% /each %}
+        </tbody>
+    </table>
+</script>
+<script src="/static/common/js/base.js"></script>
+<script src="/static/common/plugin/art-template/art-template.js"></script>
 <script src="/static/common/plugin/sheet/xlsx.mini.min.js"></script>
 <script>
     var file_input = document.querySelector("#file_input");
+    var customer_box = document.querySelector(".customer-table-box");
+
     // 用于保存表格中的数据
     var data = null;
     // 选中文件
@@ -70,10 +123,11 @@
         // 读取表格
         readExcel(this.files[0], data=>{
             console.log(data);
+            customer_box.innerHTML = renderHTML(data);
         });
     }
 
-    var fields = ["name", "company", "tel", "addr", "tag", "stage", "contract", "price", "amount", "appointStart", "appointEnd", "period", "payee", "payeeUsername", "bank", "remark"];
+    var fields = ["name", "company", "tel", "addr", "tag", "stage", "contract", "price", "amount", "appoint_start", "appoint_end", "period", "payee", "payee_username", "bank", "remark"];
 
     // 读取xlsx文件内容
     function readExcel(file, callback) {
@@ -94,10 +148,16 @@
     }
 
     // 模板渲染
-    function renderHTML(){
-        var template = template("customer_table", {
-            
+    function renderHTML(data){
+        var rule = template.defaults.rules[1];
+        rule.test = new RegExp(rule.test.source.replace("\{\{", "\{%").replace("}}", "%}"));
+        var customer_table_str = template("customer_table", {
+            data: data
         });
+
+        return customer_table_str;
     }
+
+
     
 </script>

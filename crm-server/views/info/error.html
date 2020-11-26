@@ -6,11 +6,29 @@
     <link rel="stylesheet" href="/static/common/css/base.css">
     <link rel="stylesheet" href="/static/common/plugin/layui/css/layui.css">
     <title>错误详情</title>
+    <style>
+        .error-box {
+            text-align: center;
+            margin-top: 40px;
+        }
+        .layui-icon-face-cry {
+            font-size: 100px;
+            color: red;
+        }
+        .error-msg {
+            padding: 15px 0;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        {{.msg}}
-        <a href="javascript:history.back();" class="layui-btn">返回</a>
+        <div class="error-box">
+            <i class="layui-icon layui-icon-face-cry"></i>
+            <p class="error-msg">{{.msg}}</p>
+            <a href="javascript:history.back();" class="layui-btn">返回</a>
+        </div>
+
     </div>
 </body>
 </html>
